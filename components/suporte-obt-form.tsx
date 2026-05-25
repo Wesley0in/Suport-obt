@@ -2,17 +2,15 @@
 
 import { useState, useEffect } from "react"
 import { useTheme } from "next-themes"
-import { CheckCircle2, Moon, Sun } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { KontikLogo } from "./kontik-logo"
 import { SearchableSelect } from "./searchable-select"
 import { FormField } from "./form-field"
 import { SectionDivider } from "./section-divider"
-
+import { CheckCircle2, Moon, Sun } from "lucide-react"
 
 const WEBHOOK_URL = process.env.NEXT_PUBLIC_WEBHOOK_URL_SUPORTE_OBT ?? "https://YOUR_WEBHOOK_URL_HERE"
 
-// ─── Option lists ──────────────────────────────────────────────────────────
 const TIPOS = ["Request", "Incident"]
 
 const GRUPOS_EMPRESA = [
@@ -101,7 +99,6 @@ const FILAS_ATENDIMENTO = [
   "Suporte Implantação", "Resolvido", "Fechado",
 ]
 
-// ─── Types ─────────────────────────────────────────────────────────────────
 interface FormState {
   tipo: string
   grupoEmpresa: string
@@ -131,7 +128,6 @@ const INITIAL_STATE: FormState = {
   filaAtendimento: "",
 }
 
-// ─── Shared input styles ───────────────────────────────────────────────────
 const inputBase =
   "w-full px-3 py-2.5 text-sm rounded-[6px] border outline-none transition-all focus:ring-2 focus:ring-offset-0 " +
   "border-[#404653] bg-white text-[#404653] placeholder:text-[#9aa0ad] " +
@@ -141,12 +137,7 @@ const inputBase =
 const inputError = "border-red-500 focus:ring-red-200 dark:border-red-400"
 
 function NativeSelect({
-  options,
-  value,
-  onChange,
-  id,
-  error,
-  required,
+  options, value, onChange, id, error, required,
 }: {
   options: string[]
   value: string
@@ -162,18 +153,11 @@ function NativeSelect({
         value={value}
         required={required}
         onChange={(e) => onChange(e.target.value)}
-        className={cn(
-          inputBase,
-          "appearance-none pr-9 cursor-pointer",
-          !value && "text-[#9aa0ad]",
-          error && inputError
-        )}
+        className={cn(inputBase, "appearance-none pr-9 cursor-pointer", !value && "text-[#9aa0ad]", error && inputError)}
         style={{ color: value ? "var(--input-text)" : "var(--input-ph)" }}
       >
         <option value="" disabled>Selecione...</option>
-        {options.map((o) => (
-          <option key={o} value={o}>{o}</option>
-        ))}
+        {options.map((o) => <option key={o} value={o}>{o}</option>)}
       </select>
       <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -184,7 +168,6 @@ function NativeSelect({
   )
 }
 
-// ─── Main Component ─────────────────────────────────────────────────────────
 export function SuporteObtForm() {
   const [form, setForm] = useState<FormState>(INITIAL_STATE)
   const [errors, setErrors] = useState<FormErrors>({})
@@ -197,9 +180,7 @@ export function SuporteObtForm() {
 
   function set<K extends keyof FormState>(key: K, value: FormState[K]) {
     setForm((prev) => ({ ...prev, [key]: value }))
-    if (key in errors) {
-      setErrors((prev) => ({ ...prev, [key]: undefined }))
-    }
+    if (key in errors) setErrors((prev) => ({ ...prev, [key]: undefined }))
   }
 
   function validate(): FormErrors {
@@ -214,7 +195,6 @@ export function SuporteObtForm() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setSubmitError("")
-
     const errs = validate()
     if (Object.keys(errs).length > 0) {
       setErrors(errs)
@@ -226,7 +206,6 @@ export function SuporteObtForm() {
       firstErrorEl?.scrollIntoView({ behavior: "smooth", block: "center" })
       return
     }
-
     setSubmitting(true)
     try {
       const payload = {
@@ -239,13 +218,11 @@ export function SuporteObtForm() {
         prioridade: form.prioridade || null,
         fila_atendimento_suporte_obt: form.filaAtendimento,
       }
-
       const res = await fetch(WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       })
-
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
       setSuccess(true)
       setForm(INITIAL_STATE)
@@ -267,11 +244,7 @@ export function SuporteObtForm() {
           <p className="text-sm mt-2" style={{ color: "var(--text-muted)" }}>
             O ticket de Suporte OBT foi registrado.
           </p>
-          <button
-            onClick={() => setSuccess(false)}
-            className="mt-6 text-sm font-medium underline"
-            style={{ color: "var(--text-primary)" }}
-          >
+          <button onClick={() => setSuccess(false)} className="mt-6 text-sm font-medium underline" style={{ color: "var(--text-primary)" }}>
             Preencher novo formulário
           </button>
         </div>
@@ -280,134 +253,78 @@ export function SuporteObtForm() {
   }
 
   return (
-    <main
-      className="min-h-screen py-10 px-4 font-sans"
-      style={{ background: "#f4f5f3" }}
-    >
+    <main className="min-h-screen py-10 px-4 font-sans" style={{ background: "var(--page-bg)" }}>
       <div className="mx-auto w-full max-w-[720px]">
-        {/* Card */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-          {/* Header bar */}
+        <div className="rounded-xl shadow-sm overflow-hidden border" style={{ background: "var(--card-bg)", borderColor: "var(--card-border)" }}>
           <div className="h-1.5 w-full" style={{ background: "#C2D82F" }} />
 
           <div className="px-8 pt-8 pb-10 sm:px-10">
-            {/* Logo */}
-            <div className="flex justify-center mb-6">
-              <KontikLogo />
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex-1 flex justify-center">
+                <KontikLogo />
+              </div>
+              {mounted && (
+                <button
+                  onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                  aria-label="Alternar tema"
+                  className="ml-2 flex-shrink-0 flex items-center justify-center w-9 h-9 rounded-lg transition-colors hover:opacity-80"
+                  style={{ background: "var(--toggle-bg)", color: "var(--toggle-color)" }}
+                >
+                  {theme === "dark" ? <Sun size={17} /> : <Moon size={17} />}
+                </button>
+              )}
             </div>
 
-            {/* Title */}
             <div className="text-center mb-8">
-              <h1
-                className="text-xl font-bold tracking-tight text-balance"
-                style={{ color: "var(--text-primary)" }}
-              >
+              <h1 className="text-xl font-bold tracking-tight text-balance" style={{ color: "var(--title-color)" }}>
                 Suporte OBT
               </h1>
-              <p className="text-sm mt-1.5 leading-relaxed" style={{ color: "#9aa0ad" }}>
+              <p className="text-sm mt-1.5 leading-relaxed" style={{ color: "var(--text-muted)" }}>
                 Preencha todos os campos obrigatórios antes de finalizar o atendimento
               </p>
-              <p className="text-xs mt-2" style={{ color: "#9aa0ad" }}>
-                Campos marcados com{" "}
-                <span style={{ color: "#E31F26" }}>*</span> são obrigatórios
+              <p className="text-xs mt-2" style={{ color: "var(--text-muted)" }}>
+                Campos marcados com <span style={{ color: "#E31F26" }}>*</span> são obrigatórios
               </p>
             </div>
 
             <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
-              {/* ── Seção: Identificação ──────────────────────────────────── */}
               <SectionDivider title="Identificação" />
 
-              {/* 1. Tipo */}
               <FormField label="Tipo" htmlFor="tipo">
-                <NativeSelect
-                  id="tipo"
-                  options={TIPOS}
-                  value={form.tipo}
-                  onChange={(v) => set("tipo", v)}
-                />
+                <NativeSelect id="tipo" options={TIPOS} value={form.tipo} onChange={(v) => set("tipo", v)} />
               </FormField>
 
-              {/* 2. Grupo Empresa */}
-              <FormField
-                label="Grupo Empresa"
-                required
-                error={errors.grupoEmpresa}
-                htmlFor="grupoEmpresa"
-              >
+              <FormField label="Grupo Empresa" required error={errors.grupoEmpresa} htmlFor="grupoEmpresa">
                 <SearchableSelect
                   id="grupoEmpresa"
                   options={GRUPOS_EMPRESA}
                   value={form.grupoEmpresa}
-                  onChange={(v) => {
-                    setForm((prev) => ({ ...prev, grupoEmpresa: v }))
-                    setErrors((prev) => ({ ...prev, grupoEmpresa: undefined }))
-                  }}
+                  onChange={(v) => { setForm((prev) => ({ ...prev, grupoEmpresa: v })); setErrors((prev) => ({ ...prev, grupoEmpresa: undefined })) }}
                   error={errors.grupoEmpresa}
                   required
                 />
               </FormField>
 
-              {/* 3. Sistema */}
-              <FormField
-                label="Sistema"
-                required
-                error={errors.sistema}
-                htmlFor="sistema"
-              >
-                <NativeSelect
-                  id="sistema"
-                  options={SISTEMAS}
-                  value={form.sistema}
-                  onChange={(v) => set("sistema", v)}
-                  error={errors.sistema}
-                  required
-                />
+              <FormField label="Sistema" required error={errors.sistema} htmlFor="sistema">
+                <NativeSelect id="sistema" options={SISTEMAS} value={form.sistema} onChange={(v) => set("sistema", v)} error={errors.sistema} required />
               </FormField>
 
-              {/* ── Seção: Classificação ──────────────────────────────────── */}
               <SectionDivider title="Classificação" />
 
-              {/* 4. Categoria Suporte OBT */}
-              <FormField
-                label="Categoria Suporte OBT"
-                required
-                error={errors.categoriaSuporteObt}
-                htmlFor="categoriaSuporteObt"
-              >
-                <NativeSelect
-                  id="categoriaSuporteObt"
-                  options={CATEGORIAS_SUPORTE_OBT}
-                  value={form.categoriaSuporteObt}
-                  onChange={(v) => set("categoriaSuporteObt", v)}
-                  error={errors.categoriaSuporteObt}
-                  required
-                />
+              <FormField label="Categoria Suporte OBT" required error={errors.categoriaSuporteObt} htmlFor="categoriaSuporteObt">
+                <NativeSelect id="categoriaSuporteObt" options={CATEGORIAS_SUPORTE_OBT} value={form.categoriaSuporteObt} onChange={(v) => set("categoriaSuporteObt", v)} error={errors.categoriaSuporteObt} required />
               </FormField>
 
-              {/* 5. Serviço */}
               <FormField label="Serviço" htmlFor="servico">
-                <NativeSelect
-                  id="servico"
-                  options={SERVICOS}
-                  value={form.servico}
-                  onChange={(v) => set("servico", v)}
-                />
+                <NativeSelect id="servico" options={SERVICOS} value={form.servico} onChange={(v) => set("servico", v)} />
               </FormField>
 
-              {/* 7. Prioridade */}
               <FormField label="Prioridade" htmlFor="prioridade">
-                <NativeSelect
-                  id="prioridade"
-                  options={PRIORIDADES}
-                  value={form.prioridade}
-                  onChange={(v) => set("prioridade", v)}
-                />
+                <NativeSelect id="prioridade" options={PRIORIDADES} value={form.prioridade} onChange={(v) => set("prioridade", v)} />
               </FormField>
 
-              {/* ── Seção: Detalhes ───────────────────────────────────────── */}
               <SectionDivider title="Detalhes" />
 
-              {/* 6. Observações */}
               <FormField label="Observações" htmlFor="observacoes">
                 <textarea
                   id="observacoes"
@@ -419,38 +336,18 @@ export function SuporteObtForm() {
                 />
               </FormField>
 
-              {/* ── Seção: Fila ───────────────────────────────────────────── */}
               <SectionDivider title="Fila" />
 
-              {/* 8. Fila de Atendimento Suporte OBT */}
-              <FormField
-                label="Fila de Atendimento Suporte OBT"
-                required
-                error={errors.filaAtendimento}
-                htmlFor="filaAtendimento"
-              >
-                <NativeSelect
-                  id="filaAtendimento"
-                  options={FILAS_ATENDIMENTO}
-                  value={form.filaAtendimento}
-                  onChange={(v) => set("filaAtendimento", v)}
-                  error={errors.filaAtendimento}
-                  required
-                />
+              <FormField label="Fila de Atendimento Suporte OBT" required error={errors.filaAtendimento} htmlFor="filaAtendimento">
+                <NativeSelect id="filaAtendimento" options={FILAS_ATENDIMENTO} value={form.filaAtendimento} onChange={(v) => set("filaAtendimento", v)} error={errors.filaAtendimento} required />
               </FormField>
 
-              {/* ── Submit error ─────────────────────────────────────────── */}
               {submitError && (
-                <p
-                  className="text-sm font-medium text-center py-2 px-3 rounded-[6px] bg-red-50"
-                  style={{ color: "#E31F26" }}
-                  role="alert"
-                >
+                <p className="text-sm font-medium text-center py-2 px-3 rounded-[6px] bg-red-50 dark:bg-red-950/40" style={{ color: "#E31F26" }} role="alert">
                   {submitError}
                 </p>
               )}
 
-              {/* ── Submit button ─────────────────────────────────────────── */}
               <div className="pt-2">
                 <button
                   type="submit"
@@ -458,14 +355,9 @@ export function SuporteObtForm() {
                   className={cn(
                     "w-full py-3 rounded-[6px] text-sm font-semibold tracking-wide transition-all",
                     "focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#C2D82F]",
-                    submitting
-                      ? "opacity-60 cursor-not-allowed"
-                      : "hover:brightness-95 active:scale-[0.99]"
+                    submitting ? "opacity-60 cursor-not-allowed" : "hover:brightness-95 active:scale-[0.99]"
                   )}
-                  style={{
-                    background: "#C2D82F",
-                    color: "#404653",
-                  }}
+                  style={{ background: "#C2D82F", color: "#404653" }}
                 >
                   {submitting ? "Enviando..." : "Enviar Formulário"}
                 </button>
@@ -474,8 +366,7 @@ export function SuporteObtForm() {
           </div>
         </div>
 
-        {/* Footer */}
-        <p className="text-center text-xs mt-5" style={{ color: "#b0b5be" }}>
+        <p className="text-center text-xs mt-5" style={{ color: "var(--text-footer)" }}>
           © {new Date().getFullYear()} Kontik Business Travel. Todos os direitos reservados.
         </p>
       </div>
