@@ -1,12 +1,14 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useTheme } from "next-themes"
+import { CheckCircle2, Moon, Sun } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { KontikLogo } from "./kontik-logo"
 import { SearchableSelect } from "./searchable-select"
 import { FormField } from "./form-field"
 import { SectionDivider } from "./section-divider"
-import { CheckCircle2 } from "lucide-react"
+
 
 const WEBHOOK_URL = process.env.NEXT_PUBLIC_WEBHOOK_URL_SUPORTE_OBT ?? "https://YOUR_WEBHOOK_URL_HERE"
 
@@ -131,8 +133,12 @@ const INITIAL_STATE: FormState = {
 
 // ─── Shared input styles ───────────────────────────────────────────────────
 const inputBase =
-  "w-full px-3 py-2.5 text-sm rounded-[6px] border border-[#404653] bg-white text-[#404653] outline-none transition-all focus:ring-2 focus:ring-offset-0 focus:ring-[#C2D82F]/50 focus:border-[#C2D82F] placeholder:text-[#9aa0ad]"
-const inputError = "border-red-500 focus:ring-red-200"
+  "w-full px-3 py-2.5 text-sm rounded-[6px] border outline-none transition-all focus:ring-2 focus:ring-offset-0 " +
+  "border-[#404653] bg-white text-[#404653] placeholder:text-[#9aa0ad] " +
+  "focus:ring-[#C2D82F]/50 focus:border-[#C2D82F] " +
+  "dark:border-[#343840] dark:bg-[#22252c] dark:text-[#e2e4ec] dark:placeholder:text-[#515966] " +
+  "dark:focus:ring-[#6c9ad7]/50 dark:focus:border-[#6c9ad7]"
+const inputError = "border-red-500 focus:ring-red-200 dark:border-red-400"
 
 function NativeSelect({
   options,
@@ -162,7 +168,7 @@ function NativeSelect({
           !value && "text-[#9aa0ad]",
           error && inputError
         )}
-        style={{ color: value ? "#404653" : undefined }}
+        style={{ color: value ? "var(--input-text)" : "var(--input-ph)" }}
       >
         <option value="" disabled>Selecione...</option>
         {options.map((o) => (
@@ -185,6 +191,9 @@ export function SuporteObtForm() {
   const [submitting, setSubmitting] = useState(false)
   const [success, setSuccess] = useState(false)
   const [submitError, setSubmitError] = useState("")
+  const { theme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
 
   function set<K extends keyof FormState>(key: K, value: FormState[K]) {
     setForm((prev) => ({ ...prev, [key]: value }))
@@ -249,19 +258,19 @@ export function SuporteObtForm() {
 
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4" style={{ background: "#f4f5f3" }}>
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center max-w-md w-full">
+      <div className="min-h-screen flex items-center justify-center p-4" style={{ background: "var(--page-bg)" }}>
+        <div className="rounded-xl shadow-sm p-12 text-center max-w-md w-full border" style={{ background: "var(--card-bg)", borderColor: "var(--card-border)" }}>
           <CheckCircle2 size={52} className="mx-auto mb-4" style={{ color: "#C2D82F" }} />
-          <p className="text-lg font-semibold" style={{ color: "#404653" }}>
+          <p className="text-lg font-semibold" style={{ color: "var(--text-primary)" }}>
             Formulário enviado com sucesso!
           </p>
-          <p className="text-sm mt-2" style={{ color: "#9aa0ad" }}>
+          <p className="text-sm mt-2" style={{ color: "var(--text-muted)" }}>
             O ticket de Suporte OBT foi registrado.
           </p>
           <button
             onClick={() => setSuccess(false)}
             className="mt-6 text-sm font-medium underline"
-            style={{ color: "#404653" }}
+            style={{ color: "var(--text-primary)" }}
           >
             Preencher novo formulário
           </button>
@@ -291,7 +300,7 @@ export function SuporteObtForm() {
             <div className="text-center mb-8">
               <h1
                 className="text-xl font-bold tracking-tight text-balance"
-                style={{ color: "#404653" }}
+                style={{ color: "var(--text-primary)" }}
               >
                 Suporte OBT
               </h1>

@@ -9,6 +9,20 @@
   --brand-coral: #F15A38;
   --brand-gray: #404653;
   --brand-error: #E31F26;
+  --page-bg: #f4f5f3;
+  --card-bg: #ffffff;
+  --card-border: #e5e7eb;
+  --text-primary: #404653;
+  --text-muted: #9aa0ad;
+  --text-footer: #b0b5be;
+  --input-text: #404653;
+  --input-ph: #9aa0ad;
+  --section-line: #e5e7eb;
+  --section-label: #9aa0ad;
+  --label-color: #404653;
+  --title-color: #404653;
+  --toggle-bg: #e5e7eb;
+  --toggle-color: #404653;
 
   --background: oklch(0.97 0 0);
   --foreground: oklch(0.27 0.02 260);
@@ -46,6 +60,20 @@
 }
 
 .dark {
+  --page-bg: #141517;
+  --card-bg: #1c1e22;
+  --card-border: #2a2d36;
+  --text-primary: #e2e4ec;
+  --text-muted: #7a8190;
+  --text-footer: #4a515f;
+  --input-text: #e2e4ec;
+  --input-ph: #515966;
+  --section-line: #2a2d36;
+  --section-label: #6c9ad7;
+  --label-color: #b8bcc8;
+  --title-color: #6c9ad7;
+  --toggle-bg: #2a2d36;
+  --toggle-color: #e2e4ec;
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.145 0 0);

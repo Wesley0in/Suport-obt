@@ -22,7 +22,7 @@ export function FormField({
       <label
         htmlFor={htmlFor}
         className="text-sm font-medium"
-        style={{ color: "#404653" }}
+        style={{ color: "var(--label-color)" }}
       >
         {label}
         {required && (
